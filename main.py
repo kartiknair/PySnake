@@ -130,6 +130,13 @@ class Point:
         self.x = x
         self.y = y
 
+    def __eq__(self, other):
+        return self.x == other.x \
+            and self.y == other.y
+
+    def __hash__(self):
+        return hash(('x', self.x, 'y', self.y))
+
 
 '''
 The class for the
@@ -210,6 +217,8 @@ window = Window()
 screen = Screen()
 snake = Snake()
 apple = Point(0, 0)
+frame_rate = 1000 // 10
+
 
 '''
 Update is the function
@@ -225,16 +234,14 @@ def update():
     screen_arr = [[px("black") for i in range(60)] for j in range(6)]
 
     # Actually check if the game is over
-    for i in range(1, len(snake.body)-1):
-        if snake.body[i].x == snake.body[0].x \
-                and snake.body[i].y == snake.body[0].y:
-            gameOver = True
+    if len(set(snake.body)) != len(snake.body):
+        gameOver = True
 
     # If the game is over render out random pixels
     if gameOver:
         screen_arr = [[random_px() for i in range(60)] for j in range(6)]
         screen.render([j for sub in screen_arr for j in sub])
-        window.root.after(100, update)
+        window.root.after(frame_rate, update)
     else:
         # Add the snake to the screen
         snake.show(screen_arr)
@@ -274,9 +281,9 @@ def update():
         snake.move(screen_arr)
 
         # Call update() recursively every 100 ms
-        window.root.after(100, update)
+        window.root.after(frame_rate, update)
 
 
 # Initial call to update()
-window.root.after(100, update)
+window.root.after(frame_rate, update)
 window.mainloop()
