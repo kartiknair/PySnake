@@ -1,3 +1,16 @@
+# Python Coursework
+
+**Name:** Kartik Nair, **MISIS:** M00697094
+
+**Name:** Firas Ahmed, **MISIS:** M00738274
+
+### About the project:
+
+For our final coursework for this module we decided to recreate the very popular game **Snake**. The reason for choosing this game specifically is that we couldn't think of any video related projects that wouldn't suffer because of the extremely low resolution. Even most older games would look terrible and be unplayable on such a small display. However snake is an exception, as it is playable at very low resolutions and was one of the first games ever created, which is why it was a perfect choice for this project. We decided to use git & GitHub ([our repo is public](https://github.com/kartiknair/pysnake)) to be able to work together on two different machines while keeping our code in sync. It also helped us easily debug when issues came up because we could check previous versions easily to see what exactly was causing the problem. The code is highly documented & follows PEP 8 (The official Python style guide) for highly readable & understandable code.
+
+### Project code with comments:
+
+```python
 import opc
 import random
 import copy
@@ -287,3 +300,10 @@ def update():
 # Initial call to update()
 window.root.after(frame_rate, update)
 window.mainloop()
+```
+
+### Preview of end result
+
+As this is a document the preview is a static image:
+
+![Python%20Coursework/demo.gif](Python%20Coursework/demo.gif)
