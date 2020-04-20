@@ -103,12 +103,13 @@ class Window:
             snake.set_direction(direction)
 
     def restart(self):
-        snake.body = [Point(57, 0), Point(58, 0), Point(59, 0)]
-
-    def btn_event(self, direction):
         screen_arr = [[px("black") for i in range(60)] for j in range(6)]
         apple.x = 0
         apple.y = 0
+        snake.body = [Point(57, 0), Point(58, 0), Point(59, 0)]
+        snake.set_direction("left")
+
+    def btn_event(self, direction):
         snake.set_direction(direction)
 
 
@@ -156,7 +157,7 @@ player & snake
 
 class Snake:
     def __init__(self, direction='left'):
-        self.body = [Point(57, 0), Point(58, 0), Point(59, 0), Point(57, 0)]
+        self.body = [Point(57, 0), Point(58, 0), Point(59, 0)]
         self.direction = direction
         self.grow = False
 
@@ -380,7 +381,7 @@ def update():
                 inBody = False
 
                 for piece in snake.body:
-                    if piece.x == apple.x and piece.y == apple.y:
+                    if piece == apple:
                         inBody = True
 
                 if inBody:
