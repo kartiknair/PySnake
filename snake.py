@@ -78,6 +78,10 @@ class Window:
                        command=lambda: self.btn_event("down"))
         dnBtn.grid(column=1, row=2, sticky=N+S+E+W)
 
+        restartBtn = Button(frame, text="Restart",
+                            command=self.restart)
+        restartBtn.grid(column=1, row=1, sticky=N+S+E+W)
+
         for x in range(3):
             Grid.columnconfigure(frame, x, weight=1)
 
@@ -98,7 +102,13 @@ class Window:
                 direction == "right":
             snake.set_direction(direction)
 
+    def restart(self):
+        snake.body = [Point(57, 0), Point(58, 0), Point(59, 0)]
+
     def btn_event(self, direction):
+        screen_arr = [[px("black") for i in range(60)] for j in range(6)]
+        apple.x = 0
+        apple.y = 0
         snake.set_direction(direction)
 
 
@@ -146,7 +156,7 @@ player & snake
 
 class Snake:
     def __init__(self, direction='left'):
-        self.body = [Point(57, 0), Point(58, 0), Point(59, 0)]
+        self.body = [Point(57, 0), Point(58, 0), Point(59, 0), Point(57, 0)]
         self.direction = direction
         self.grow = False
 
@@ -213,13 +223,6 @@ class Snake:
         self.grow = False  # Reset the growing
 
 
-window = Window()
-screen = Screen()
-snake = Snake()
-apple = Point(0, 0)
-frame_rate = 1000 // 10
-
-
 '''
 Update is the function
 that will be called every
@@ -227,19 +230,130 @@ frame change
 '''
 
 
+def game_over_screen(screen):
+    # The letter 'G'
+    screen[1][10] = px("red")
+    screen[1][11] = px("red")
+    screen[1][12] = px("red")
+    screen[1][13] = px("red")
+    screen[2][10] = px("red")
+    screen[3][10] = px("red")
+    screen[4][10] = px("red")
+    screen[4][11] = px("red")
+    screen[4][12] = px("red")
+    screen[4][13] = px("red")
+    screen[3][13] = px("red")
+
+    # The letter 'A'
+    screen[1][15] = px("red")
+    screen[1][16] = px("red")
+    screen[1][17] = px("red")
+    screen[1][18] = px("red")
+    screen[2][15] = px("red")
+    screen[3][15] = px("red")
+    screen[4][15] = px("red")
+    screen[3][16] = px("red")
+    screen[3][17] = px("red")
+    screen[3][18] = px("red")
+    screen[1][19] = px("red")
+    screen[2][19] = px("red")
+    screen[3][19] = px("red")
+    screen[4][19] = px("red")
+
+    # The letter 'M'
+    screen[1][21] = px("red")
+    screen[2][21] = px("red")
+    screen[3][21] = px("red")
+    screen[4][21] = px("red")
+    screen[1][22] = px("red")
+    screen[2][23] = px("red")
+    screen[1][24] = px("red")
+    screen[1][25] = px("red")
+    screen[2][25] = px("red")
+    screen[3][25] = px("red")
+    screen[4][25] = px("red")
+
+    # The letter 'E'
+    screen[1][27] = px("red")
+    screen[1][28] = px("red")
+    screen[1][29] = px("red")
+    screen[2][27] = px("red")
+    screen[3][27] = px("red")
+    screen[3][28] = px("red")
+    screen[4][27] = px("red")
+    screen[4][28] = px("red")
+    screen[4][29] = px("red")
+
+    # The letter 'O'
+    screen[1][33] = px("red")
+    screen[2][33] = px("red")
+    screen[3][33] = px("red")
+    screen[4][33] = px("red")
+    screen[1][34] = px("red")
+    screen[1][35] = px("red")
+    screen[1][36] = px("red")
+    screen[2][36] = px("red")
+    screen[3][36] = px("red")
+    screen[4][36] = px("red")
+    screen[4][35] = px("red")
+    screen[4][34] = px("red")
+
+    # The letter 'V'
+    screen[1][38] = px("red")
+    screen[2][38] = px("red")
+    screen[3][38] = px("red")
+    screen[4][39] = px("red")
+    screen[4][40] = px("red")
+    screen[3][41] = px("red")
+    screen[2][41] = px("red")
+    screen[1][41] = px("red")
+
+    # The letter 'E'
+    screen[1][43] = px("red")
+    screen[2][43] = px("red")
+    screen[3][43] = px("red")
+    screen[4][43] = px("red")
+    screen[1][44] = px("red")
+    screen[1][45] = px("red")
+    screen[3][44] = px("red")
+    screen[4][44] = px("red")
+    screen[4][45] = px("red")
+
+    # The letter 'R'
+    screen[1][47] = px("red")
+    screen[2][47] = px("red")
+    screen[3][47] = px("red")
+    screen[4][47] = px("red")
+    screen[1][48] = px("red")
+    screen[1][49] = px("red")
+    screen[1][50] = px("red")
+    screen[2][50] = px("red")
+    screen[3][50] = px("red")
+    screen[3][49] = px("red")
+    screen[3][48] = px("red")
+    screen[4][49] = px("red")
+
+    for y in range(6):
+        for x in range(60):
+            if x < 9 or x > 52:
+                screen[y][x] = random_px()
+
+    return screen
+
+
 def update():
-    # Set the gameOver variable to False by default
-    gameOver = False
+    # Set the game_over variable to False by default
+    game_over = False
     # Reset the screen to black
     screen_arr = [[px("black") for i in range(60)] for j in range(6)]
 
     # Actually check if the game is over
     if len(set(snake.body)) != len(snake.body):
-        gameOver = True
+        game_over = True
 
     # If the game is over render out random pixels
-    if gameOver:
-        screen_arr = [[random_px() for i in range(60)] for j in range(6)]
+    if game_over:
+        screen_arr = game_over_screen(screen_arr)
         screen.render([j for sub in screen_arr for j in sub])
         window.root.after(frame_rate, update)
     else:
@@ -283,6 +397,12 @@ def update():
         # Call update() recursively every 100 ms
         window.root.after(frame_rate, update)
 
+
+window = Window()
+screen = Screen()
+snake = Snake()
+apple = Point(0, 0)
+frame_rate = 1000 // 10
 
 # Initial call to update()
 window.root.after(frame_rate, update)
