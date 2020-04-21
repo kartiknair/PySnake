@@ -225,6 +225,23 @@ class Snake:
 
 
 '''
+Read the hardcoded game over screen
+array from the txt file and then evaluate
+that text as a 2d array so we can
+subscript it later
+'''
+
+f = open("./game-over-screen.txt", "r")
+game_over_txt = ""
+
+if f.mode == 'r':
+    contents = f.read()
+    game_over_txt += contents
+
+game_over_txt = eval(game_over_txt)
+
+
+'''
 Update is the function
 that will be called every
 frame change
@@ -232,108 +249,9 @@ frame change
 
 
 def game_over_screen(screen):
-    # The letter 'G'
-    screen[1][10] = px("red")
-    screen[1][11] = px("red")
-    screen[1][12] = px("red")
-    screen[1][13] = px("red")
-    screen[2][10] = px("red")
-    screen[3][10] = px("red")
-    screen[4][10] = px("red")
-    screen[4][11] = px("red")
-    screen[4][12] = px("red")
-    screen[4][13] = px("red")
-    screen[3][13] = px("red")
+    screen = game_over_txt
 
-    # The letter 'A'
-    screen[1][15] = px("red")
-    screen[1][16] = px("red")
-    screen[1][17] = px("red")
-    screen[1][18] = px("red")
-    screen[2][15] = px("red")
-    screen[3][15] = px("red")
-    screen[4][15] = px("red")
-    screen[3][16] = px("red")
-    screen[3][17] = px("red")
-    screen[3][18] = px("red")
-    screen[1][19] = px("red")
-    screen[2][19] = px("red")
-    screen[3][19] = px("red")
-    screen[4][19] = px("red")
-
-    # The letter 'M'
-    screen[1][21] = px("red")
-    screen[2][21] = px("red")
-    screen[3][21] = px("red")
-    screen[4][21] = px("red")
-    screen[1][22] = px("red")
-    screen[2][23] = px("red")
-    screen[1][24] = px("red")
-    screen[1][25] = px("red")
-    screen[2][25] = px("red")
-    screen[3][25] = px("red")
-    screen[4][25] = px("red")
-
-    # The letter 'E'
-    screen[1][27] = px("red")
-    screen[1][28] = px("red")
-    screen[1][29] = px("red")
-    screen[2][27] = px("red")
-    screen[3][27] = px("red")
-    screen[3][28] = px("red")
-    screen[4][27] = px("red")
-    screen[4][28] = px("red")
-    screen[4][29] = px("red")
-
-    # The letter 'O'
-    screen[1][33] = px("red")
-    screen[2][33] = px("red")
-    screen[3][33] = px("red")
-    screen[4][33] = px("red")
-    screen[1][34] = px("red")
-    screen[1][35] = px("red")
-    screen[1][36] = px("red")
-    screen[2][36] = px("red")
-    screen[3][36] = px("red")
-    screen[4][36] = px("red")
-    screen[4][35] = px("red")
-    screen[4][34] = px("red")
-
-    # The letter 'V'
-    screen[1][38] = px("red")
-    screen[2][38] = px("red")
-    screen[3][38] = px("red")
-    screen[4][39] = px("red")
-    screen[4][40] = px("red")
-    screen[3][41] = px("red")
-    screen[2][41] = px("red")
-    screen[1][41] = px("red")
-
-    # The letter 'E'
-    screen[1][43] = px("red")
-    screen[2][43] = px("red")
-    screen[3][43] = px("red")
-    screen[4][43] = px("red")
-    screen[1][44] = px("red")
-    screen[1][45] = px("red")
-    screen[3][44] = px("red")
-    screen[4][44] = px("red")
-    screen[4][45] = px("red")
-
-    # The letter 'R'
-    screen[1][47] = px("red")
-    screen[2][47] = px("red")
-    screen[3][47] = px("red")
-    screen[4][47] = px("red")
-    screen[1][48] = px("red")
-    screen[1][49] = px("red")
-    screen[1][50] = px("red")
-    screen[2][50] = px("red")
-    screen[3][50] = px("red")
-    screen[3][49] = px("red")
-    screen[3][48] = px("red")
-    screen[4][49] = px("red")
-
+    # Make the pixels at the two edges flicker randomly
     for y in range(6):
         for x in range(60):
             if x < 9 or x > 52:

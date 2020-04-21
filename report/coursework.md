@@ -6,7 +6,7 @@
 
 ### About the project:
 
-For our final coursework for this module we decided to recreate the very popular game **Snake**. The reason for choosing this game specifically is that we couldn't think of any video related projects that wouldn't suffer because of the extremely low resolution. Even most older games would look terrible and be unplayable on such a small display. However snake is an exception, as it is playable at very low resolutions and was one of the first games ever created, which is why it was a perfect choice for this project. We decided to use git & GitHub ([our repo is public](https://github.com/kartiknair/pysnake)) to be able to work together on two different machines while keeping our code in sync. It also helped us easily debug when issues came up because we could check previous versions easily to see what exactly was causing the problem. The code is highly documented & follows PEP 8 (The official Python style guide) for highly readable & understandable code.
+For our final coursework for this module we decided to recreate the very popular game **Snake**. The reason for choosing this game specifically is because of it’s simplicity. The first iteration of the snake game was in 1976 for simple 8-bit arcade machines. It’s simple graphics and controls made it perfect for low resolutions, which is why we chose it for this project. We decided to use git & GitHub ([our repo is public](https://github.com/kartiknair/pysnake)) to be able to work together on two different machines while keeping our code in sync. It also helped us easily debug when issues came up because we could check previous versions easily to see what exactly was causing the problem. The code is highly documented & follows PEP 8 (The official Python style guide) for highly readable & understandable code.
 
 ### Project code with comments:
 
@@ -91,6 +91,10 @@ class Window:
                        command=lambda: self.btn_event("down"))
         dnBtn.grid(column=1, row=2, sticky=N+S+E+W)
 
+        restartBtn = Button(frame, text="Restart",
+                            command=self.restart)
+        restartBtn.grid(column=1, row=1, sticky=N+S+E+W)
+
         for x in range(3):
             Grid.columnconfigure(frame, x, weight=1)
 
@@ -110,6 +114,13 @@ class Window:
                 direction == "left" or \
                 direction == "right":
             snake.set_direction(direction)
+
+    def restart(self):
+        screen_arr = [[px("black") for i in range(60)] for j in range(6)]
+        apple.x = 0
+        apple.y = 0
+        snake.body = [Point(57, 0), Point(58, 0), Point(59, 0)]
+        snake.set_direction("left")
 
     def btn_event(self, direction):
         snake.set_direction(direction)
@@ -226,11 +237,21 @@ class Snake:
         self.grow = False  # Reset the growing
 
 
-window = Window()
-screen = Screen()
-snake = Snake()
-apple = Point(0, 0)
-frame_rate = 1000 // 10
+'''
+Read the hardcoded game over screen
+array from the txt file and then evaluate
+that text as a 2d array so we can
+subscript it later
+'''
+
+f = open("./game-over-screen.txt", "r")
+game_over_txt = ""
+
+if f.mode == 'r':
+    contents = f.read()
+    game_over_txt += contents
+
+game_over_txt = eval(game_over_txt)
 
 
 '''
@@ -240,19 +261,31 @@ frame change
 '''
 
 
+def game_over_screen(screen):
+    screen = game_over_txt
+
+    # Make the pixels at the two edges flicker randomly
+    for y in range(6):
+        for x in range(60):
+            if x < 9 or x > 52:
+                screen[y][x] = random_px()
+
+    return screen
+
+
 def update():
-    # Set the gameOver variable to False by default
-    gameOver = False
+    # Set the game_over variable to False by default
+    game_over = False
     # Reset the screen to black
     screen_arr = [[px("black") for i in range(60)] for j in range(6)]
 
     # Actually check if the game is over
     if len(set(snake.body)) != len(snake.body):
-        gameOver = True
+        game_over = True
 
     # If the game is over render out random pixels
-    if gameOver:
-        screen_arr = [[random_px() for i in range(60)] for j in range(6)]
+    if game_over:
+        screen_arr = game_over_screen(screen_arr)
         screen.render([j for sub in screen_arr for j in sub])
         window.root.after(frame_rate, update)
     else:
@@ -263,7 +296,7 @@ def update():
         screen_arr[apple.y][apple.x] = px("green")
 
         # Check if snake has eaten apple
-        if snake.body[0].x == apple.x and snake.body[0].y == apple.y:
+        if snake.body[0] == apple:
             # Call eat on the snake
             snake.eat(apple, screen_arr)
 
@@ -279,7 +312,7 @@ def update():
                 inBody = False
 
                 for piece in snake.body:
-                    if piece.x == apple.x and piece.y == apple.y:
+                    if piece == apple:
                         inBody = True
 
                 if inBody:
@@ -296,6 +329,12 @@ def update():
         # Call update() recursively every 100 ms
         window.root.after(frame_rate, update)
 
+
+window = Window()
+screen = Screen()
+snake = Snake()
+apple = Point(0, 0)
+frame_rate = 1000 // 10
 
 # Initial call to update()
 window.root.after(frame_rate, update)
