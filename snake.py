@@ -241,13 +241,6 @@ if f.mode == 'r':
 game_over_txt = eval(game_over_txt)
 
 
-'''
-Update is the function
-that will be called every
-frame change
-'''
-
-
 def game_over_screen(screen):
     screen = game_over_txt
 
@@ -258,6 +251,13 @@ def game_over_screen(screen):
                 screen[y][x] = random_px()
 
     return screen
+
+
+'''
+Update is the function
+that will be called every
+frame change
+'''
 
 
 def update():
