@@ -107,6 +107,7 @@ class Window:
         apple.x = 0
         apple.y = 0
         snake.body = [Point(57, 0), Point(58, 0), Point(59, 0)]
+        snake.grow = False
         snake.set_direction("left")
 
     def btn_event(self, direction):
@@ -201,18 +202,8 @@ class Snake:
         elif self.direction == "down":
             newHead.y += 1
 
-        # Make sure user wraps around walls
-        if newHead.x >= 60:
-            newHead.x = 0
-
-        elif newHead.x <= -1:
-            newHead.x = 59
-
-        if newHead.y >= 6:
-            newHead.y = 0
-
-        elif newHead.y <= -1:
-            newHead.y = 5
+        newHead.x = (newHead.x + 60) % 60
+        newHead.y = (newHead.y + 6) % 6
 
         # If snake is not growing remove the last piece
         if not self.grow:
